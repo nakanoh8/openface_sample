@@ -1,6 +1,6 @@
 # openface_sample
 
-# 手順
+## 手順
 
 ### ローカルの作業ディレクトリへGitClone
 cd {作業ディレクトリ}
