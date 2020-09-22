@@ -16,3 +16,7 @@ docker run -it -v {作業ディレクトリの絶対パス(pwd)}:/home/ ict_stor
 ### コンテナでサンプルコード実行
 python3 /home/ict_store_face_check/main.py
 
+## Dockerfile作成時の参考記事
+https://elsammit-beginnerblg.hatenablog.com/entry/2020/05/17/192559
+https://blog.goo.ne.jp/jsp_job/e/a779b628252e23a4ebcf6c857e748f2f
+
