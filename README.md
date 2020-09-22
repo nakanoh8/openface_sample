@@ -3,8 +3,8 @@
 ## 手順
 
 ### ローカルの作業ディレクトリへGitClone
-cd {作業ディレクトリ}
-git clone ict_store_face_check
+cd {作業ディレクトリ}  
+git clone ict_store_face_check  
 cd ict_store_face_check
 
 ### Dockerfileをbuildしてイメージを作成
