@@ -26,7 +26,7 @@ python3 /home/face_recognition/main.py
   
 #### 顔認証ソースファイル構成
 ・main.py　・・・　顔認証実行ファイル（動作確認用サンプル）。OpenFaceを用いた関数群（openface_func.py）を利用。  
-・openface_func.py ・・・　OpenFaceを用いた関数群。「顔ベクトル取得」「顔ベクトル間の距離取得」関数を持つ。
+・openface_func.py ・・・　OpenFaceを用いた関数群(顔ベクトル取得&顔ベクトル間の距離取得)。
   
 ## 参考記事
   
