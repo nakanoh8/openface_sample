@@ -1,6 +1,6 @@
 # openface_sample
 
-## 手順
+## 顔認証サンプルコードの動作確認手順
 
 ### Dockerのインストール
 参考記事
@@ -18,11 +18,17 @@ docker build -t ict_store/face_recognition:1.0 .
 ### イメージをrunしてコンテナを作成 （ローカルの作業ディレクトリとコンテナのhomeディレクトリを共有）
 docker run -it -v {作業ディレクトリの絶対パス(pwd)}/ict_store/exxxxxx/:/home/ ict_store/face_recognition:1.0 /bin/bash
 
-### コンテナ上でサンプルコードを実行
+### コンテナ上で顔認証サンプルコードを実行
 python3 /home/face_recognition/main.py  
   
 #### 実行結果  
 ・・・・・・・・・・  
+
+#### 顔認証ソースファイル構成
+
+・main.py　・・・　顔認証実行ファイル（動作確認用サンプル）。OpenFaceを用いた関数群（openface_func.py）を利用。
+・openface_func.py ・・・　OpenFaceを用いた関数群。「顔ベクトル取得」「顔ベクトル間の距離取得」関数を持つ。
+
 
 ## 参考記事
 
