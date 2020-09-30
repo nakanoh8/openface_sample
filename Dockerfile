@@ -6,18 +6,8 @@ RUN sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install -y wg
 # 必要な pip パッケージのインストール
 RUN sudo pip install -U pip && sudo pip install numpy==1.12.0 scipy matplotlib cython scikit-image dlib pandas txaio
 
-# OpenCVのインストール
-WORKDIR /root
-RUN wget http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/3.0.0/opencv-3.0.0.zip
-RUN unzip opencv-3.0.0.zip
-WORKDIR /root/opencv-3.0.0
-RUN cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D WITH_FFMPEG=OFF -D BUILD_opencv_python2=ON .
-RUN make -j`nproc`
-RUN sudo make install
-RUN sudo cp lib/cv2.so /usr/local/lib/python2.7/site-packages/
-RUN sudo ln /dev/null /dev/raw1394
-
 # Torchのインストール
+WORKDIR /root
 RUN git clone https://github.com/torch/distro.git ~/torch --recursive
 WORKDIR /root/torch
 RUN sudo dpkg --configure -a
