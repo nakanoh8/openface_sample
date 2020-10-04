@@ -7,6 +7,8 @@ media.then((stream) => {
     video.srcObject = stream;
 });
 
+var img_file_name = null;
+
 function saveCaptureImg() {
     var canvas = document.getElementById('canvas');
 
@@ -18,7 +20,8 @@ function saveCaptureImg() {
     //canvasをJPEG変換し、そのBase64文字列をhrefへセット
     a.href = canvas.toDataURL('image/jpeg'); //base64でデータ化
     //ダウンロード時のファイル名を指定
-    a.download = 'download.jpg';
+    img_file_name = Math.random().toString(32).substring(2);
+    a.download = img_file_name + '.jpg';
     //クリックイベントを発生させる
     a.click();
 }
@@ -29,5 +32,28 @@ document.addEventListener('keydown', (event) => {
         console.log(`keydown: SpaceKey`);
         console.log('pushed capture');
         saveCaptureImg();
+        post();
     }
 });
+
+xhr = new XMLHttpRequest();
+
+// サーバからのデータ受信を行った際の動作
+xhr.onload = function (e) {
+    if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+            console.log(xhr.responseText);
+        }
+    }
+};
+
+function post() {
+    xhr.open('POST', 'http://localhost:3000/imgcheck', true);
+    xhr.setRequestHeader(
+        'content-type',
+        'application/x-www-form-urlencoded;charset=UTF-8'
+    );
+    // フォームに入力した値をリクエストとして設定
+    var request = 'filename=' + img_file_name;
+    xhr.send(request);
+}

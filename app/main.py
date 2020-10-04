@@ -19,7 +19,9 @@ def faceCheck(input_img):
 
     ##### 顔比較サンプル
     sample_img_vec = openface_func.getFaceVector("/root/openface/images/examples/lennon-2.jpg")
-    print(openface_func.getDistance(input_img_vec, sample_img_vec))
+    res = openface_func.getDistance(input_img_vec, sample_img_vec)
+    print(res)
+    return res
     #####
 
 
