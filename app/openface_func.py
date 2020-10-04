@@ -57,7 +57,8 @@ def getFaceVector(imgPath):
     start = time.time()
     bb = align.getLargestFaceBoundingBox(rgbImg)
     if bb is None:
-        raise Exception("Unable to find a face: {}".format(imgPath))
+        return None
+        # raise Exception("Unable to find a face: {}".format(imgPath))
     if args.verbose:
         print("  + Face detection took {} seconds.".format(time.time() - start))
 

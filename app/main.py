@@ -7,6 +7,9 @@ def faceCheck(input_img):
     # NG: Noneを返却
     input_img_vec = openface_func.getFaceVector(input_img)
 
+    if input_img_vec is None:
+        return None
+
     # NGの場合
     # 顔ベクトル取得失敗ログ出力
  
