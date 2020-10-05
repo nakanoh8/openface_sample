@@ -84,3 +84,24 @@ def getFaceVector(imgPath):
 def getDistance(imgVec1, imgVec2):
     d = imgVec1 - imgVec2
     return "{:0.3f}".format(np.dot(d, d))
+
+
+# 顔ベクトル取得
+def getFaceBoundingBox(imgPath):
+    bgrImg = cv2.imread(imgPath)
+    if bgrImg is None:
+        raise Exception("Unable to load image: {}".format(imgPath))
+    rgbImg = cv2.cvtColor(bgrImg, cv2.COLOR_BGR2RGB)
+
+    start = time.time()
+    bb = align.getLargestFaceBoundingBox(rgbImg)
+    if bb is None:
+        return None
+    bb_dict = {
+        "left": bb.left(), 
+        "top": bb.top(), 
+        "right": bb.right(), 
+        "bottom": bb.bottom()
+        }
+    return bb_dict
+        # raise Exception("Unable to find a face: {}".format(imgPath))

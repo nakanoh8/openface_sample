@@ -27,5 +27,8 @@ def faceCheck(input_img):
     return res
     #####
 
+def getFaceBoundingBox(input_img):
+    return openface_func.getFaceBoundingBox(input_img)
+
 
 # faceCheck("/root/openface/images/examples/lennon-1.jpg")

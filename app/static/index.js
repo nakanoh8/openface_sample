@@ -10,21 +10,38 @@ media.then((stream) => {
 var img_file_name = null;
 
 function saveCaptureImg() {
+    console.log('up');
     var canvas = document.getElementById('canvas');
 
     canvas.setAttribute('width', video.width);
     canvas.setAttribute('height', video.height);
-    canvas.getContext('2d').drawImage(video, 0, 0, video.width, video.height);
+    context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, video.width, video.height);
+    // context.strokeStyle = '#FF0000';
+    // context.strokeRect(400, 300, 100, 150);
 
-    var a = document.createElement('a');
-    //canvasをJPEG変換し、そのBase64文字列をhrefへセット
-    a.href = canvas.toDataURL('image/jpeg'); //base64でデータ化
-    //ダウンロード時のファイル名を指定
-    img_file_name = Math.random().toString(32).substring(2);
-    a.download = img_file_name + '.jpg';
-    //クリックイベントを発生させる
-    a.click();
+    // var a = document.createElement('a');
+    // //canvasをJPEG変換し、そのBase64文字列をhrefへセット
+    // a.href = canvas.toDataURL('image/jpeg'); //base64でデータ化
+    // //ダウンロード時のファイル名を指定
+    // img_file_name = Math.random().toString(32).substring(2);
+    // a.download = img_file_name + '.jpg';
+    // //クリックイベントを発生させる
+    // a.click();
 }
+
+// video.addEventListener('timeupdate', saveCaptureImg(), true);
+video.addEventListener(
+    'timeupdate',
+    function () {
+        var canvas = document.getElementById('canvas');
+        canvas.setAttribute('width', video.width);
+        canvas.setAttribute('height', video.height);
+        context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, video.width, video.height);
+    },
+    true
+);
 
 document.addEventListener('keydown', (event) => {
     var keyName = event.key;

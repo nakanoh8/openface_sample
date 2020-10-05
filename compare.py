@@ -75,6 +75,9 @@ def getRep(imgPath):
 
     start = time.time()
     bb = align.getLargestFaceBoundingBox(rgbImg)
+    # print(bb)
+    # print(bb.left())
+    # print(type(bb))
     if bb is None:
         raise Exception("Unable to find a face: {}".format(imgPath))
     if args.verbose:
