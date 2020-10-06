@@ -16,7 +16,7 @@ def get_test():
     # return make_response(json.dumps(result, ensure_ascii=False))
 
 @api.route('/imgcheck', methods=['POST'])
-def imgcheck():
+def img_check():
     time.sleep(1)
     res = main.faceCheck("/home/downloads/" + request.form["filename"] + ".jpg")
     if res is None:

@@ -77,14 +77,19 @@ def getFaceVector(imgPath):
         print("Representation:")
         print(rep)
         print("-----\n")
-    return rep
+    return toArrFromNdarr(rep)
 
 
 # 顔ベクトル間の距離を取得
 def getDistance(imgVec1, imgVec2):
-    d = imgVec1 - imgVec2
+    d = toNdarrFromArr(imgVec1) - toNdarrFromArr(imgVec2)
     return "{:0.3f}".format(np.dot(d, d))
 
+def toArrFromNdarr(ndarr):
+    return ndarr.tolist()
+
+def toNdarrFromArr(arr):
+    return np.array(arr)
 
 # 顔ベクトル取得
 def getFaceBoundingBox(imgPath):
