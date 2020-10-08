@@ -2,18 +2,19 @@ FROM ubuntu:16.04
 
 # aptパッケージの更新
 # 必要な apt パッケージのインストール
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y wget sudo python-setuptools \
-    liblapack-dev libatlas-base-dev gfortran g++ build-essential \
-    libgtk2.0-dev libjpeg-dev libtiff5-dev libjasper-dev libopenexr-dev \
-    libtbb-dev libeigen3-dev yasm libfaac-dev \
+RUN sudo apt-get update && \
+    sudo apt-get upgrade -y && \
+    sudo apt-get install -y wget sudo python-setuptools python-pip \
+    liblapack-dev libatlas-base-dev gfortran g++ build-essential libgtk2.0-dev \
+    libjpeg-dev libtiff5-dev libjasper-dev libopenexr-dev \
+    python-numpy python-tk libtbb-dev libeigen3-dev yasm libfaac-dev \
     libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev \
     libxvidcore-dev libx264-dev libqt4-dev libqt4-opengl-dev sphinx-common \
     texlive-latex-extra libv4l-dev libdc1394-22-dev libavcodec-dev \
     libavformat-dev libswscale-dev default-jdk ant libvtk5-qt4-dev unzip cmake \
-    git python3-dev python3-pip libboost-dev libboost-python-dev \
-    libboost-system-dev python-numpy python-tk
+    git python3-dev python-dev python-numpy libboost-dev libboost-python-dev libboost-system-dev
+# 必要な pip パッケージのインストール
+# RUN sudo pip install -U pip && sudo pip install numpy==1.12.0 scipy matplotlib cython scikit-image dlib pandas txaio
 
 # Torchのインストール
 WORKDIR /root
@@ -23,12 +24,13 @@ RUN sudo dpkg --configure -a
 RUN bash install-deps
 RUN ./install.sh -y
 RUN . /root/.bashrc
+# RUN which th
 RUN export PATH=/root/torch/bin:$PATH;
 RUN export LD_LIBRARY_PATH=/root/torch/lib:$LD_LIBRARY_PATH;
 
 # Torch用のLUAパッケージをインストール
 # luarocksをビルドするのにlua**が必要になるため事前にインストール.
-RUN sudo apt-get install -y lua5.3 lua5.3-dev
+RUN sudo apt-get install lua5.3 lua5.3-dev
 #luarocksをインストール
 RUN mkdir luarocks
 WORKDIR /root/torch/luarocks
@@ -38,6 +40,7 @@ WORKDIR /root/torch/luarocks/luarocks-3.3.1
 RUN ./configure
 RUN make
 RUN make install
+
 #LUAパッケージインストール
 RUN for NAME in dpnn nn optim optnet csvigo cutorch cunn fblualib torchx tds image nngraph; \
     do sudo /root/torch/install/bin/luarocks install $NAME; done
@@ -45,16 +48,19 @@ RUN for NAME in dpnn nn optim optnet csvigo cutorch cunn fblualib torchx tds ima
 # OpenFaceのインストール
 RUN git clone https://github.com/cmusatyalab/openface ~/openface --recursive
 WORKDIR /root/openface
+# RUN sudo python setup.py install
 RUN sudo python3 setup.py install
 
 # 追加で必要なものをインストール
 RUN ./models/get-models.sh
-RUN git config --global url.https://github.com/.insteadOf git://github.com/
 RUN ./demos/web/install-deps.sh
 # RUN sudo pip install -r demos/web/requirements.txt
 
 # python3でOpenFaceを動かすために必要なものをインストール
-RUN python3 -m pip install -U pip && python3 -m pip install opencv_python dlib
-WORKDIR /home
+WORKDIR /root
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+RUN sudo python3 get-pip.py && python3 -m pip install -U pip
+# RUN sudo apt-get install -y python3-dev
+RUN python3 -m pip install opencv_python dlib
 
 

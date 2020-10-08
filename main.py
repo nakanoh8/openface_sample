@@ -23,4 +23,4 @@ def faceCheck(input_img):
     #####
 
 
-# faceCheck("/root/openface/images/examples/lennon-1.jpg")
+faceCheck("/root/openface/images/examples/lennon-1.jpg")
