@@ -9,14 +9,18 @@ template = Template('Hello {{ name }}!')
 
 api = Flask(__name__)
 
-@api.route('/test', methods=['GET'])
-def get_test():
+@api.route('/', methods=['GET'])
+def index():
     return render_template('index.html')
     # Unicodeにしたくない場合は↓
     # return make_response(json.dumps(result, ensure_ascii=False))
+@api.route('/face_bb', methods=['POST'])
+def face_bb():
+    face_bb = main.get_face_bounding_box(request.form["img"])
+    return make_response(face_bb)
 
-@api.route('/imgcheck', methods=['POST'])
-def img_check():
+@api.route('/face_recog', methods=['POST'])
+def face_recog():
     time.sleep(1)
     res = main.faceCheck("/home/downloads/" + request.form["filename"] + ".jpg")
     if res is None:

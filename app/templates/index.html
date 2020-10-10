@@ -6,20 +6,36 @@
     <title>face_recognition</title>
 </head>
 <body>
-    <video id="video" width="640" height="480" autoplay></video>
-    <canvas id="canvas" width="640" height="480"></canvas>
-    <canvas id="canvas2" width="640" height="480"></canvas>
+    <div class="canvas-wrapper">
+        <video id="video" width="640" height="480" autoplay></video>
+        <canvas id="canvas2"></canvas>
+    </div>
+    <canvas id="canvas"></canvas>
+    <!-- <canvas id="canvas" width="640" height="480"></canvas>
+    <canvas id="canvas2" width="640" height="480"></canvas> -->
 </body>
 <script src="{{url_for('static', filename='index.js')}}"></script>
     
-<!-- <style>
-    #video {
+<style>
+    /* #video {
         position: absolute; 
         top:0; 
         width: 100%; 
         height: 100%; 
         background: #FFF; 
         z-index: 9999999999;
+    } */
+
+    .canvas-wrapper {
+    position: relative;
     }
-</style> -->
+    .canvas-wrapper canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #canvas {
+        display: none !important;
+    }
+</style>
 </html>
