@@ -1,1 +1,6 @@
 __pycache__
+openface
+requirements.txt
+simpleSSLServer.py
+start-servers.sh
+websocket-server.py

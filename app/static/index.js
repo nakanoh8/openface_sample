@@ -23,16 +23,8 @@ var img_file_name = null;
 var xhr = new XMLHttpRequest();
 
 function authenticate() {
-    context.drawImage(video, 0, 0, video.width, video.height);
-    // var a = document.createElement('a');
-    // //canvasをJPEG変換し、そのBase64文字列をhrefへセット
-    // a.href = canvas.toDataURL('image/jpeg'); //base64でデータ化
-    // //ダウンロード時のファイル名を指定
-    // img_file_name = Math.random().toString(32).substring(2);
-    // a.download = img_file_name + '.jpg';
-    // //クリックイベントを発生させる
-    // a.click();
-    postFaceRecog(canvas.toDataURL('image/jpeg'));
+    // context2.drawImage(video, 0, 0, video.width, video.height);
+    postFaceRecog(canvas.toDataURL('image/jpeg').replace(/^.*,/, ''));
 }
 
 // video.addEventListener('timeupdate', saveCaptureImg(), true);
@@ -57,35 +49,25 @@ document.addEventListener('keydown', (event) => {
 });
 
 function drawFaceBB() {
-    console.log('run drawFaceBB()');
     postFaceBB(canvas.toDataURL('image/jpeg').replace(/^.*,/, ''));
 }
 
-function postFaceRecog() {
+function postFaceRecog(img_base64) {
+    const body = new FormData();
+    body.append('img', img_base64);
     xhr.open('POST', 'http://localhost:3000/face_recog', true);
-    xhr.setRequestHeader(
-        'content-type',
-        'application/x-www-form-urlencoded;charset=UTF-8'
-    );
-    // フォームに入力した値をリクエストとして設定
-    var request = 'filename=' + img_file_name;
-    // サーバからのデータ受信を行った際の動作
-    xhr.onload = function (e) {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                console.log(xhr.responseText);
-            }
-        }
+    xhr.onload = () => {
+        console.log(xhr.responseText)
+        drawFaceBB();
     };
-    xhr.send(request);
+    xhr.send(body);
 }
 
-function postFaceBB(cap_img) {
+function postFaceBB(cap_img_base64) {
     const body = new FormData();
-    body.append('img', cap_img);
+    body.append('img', cap_img_base64);
     xhr.open('POST', 'http://localhost:3000/face_bb', true);
     xhr.onload = () => {
-        console.log(xhr.responseText);
         res = JSON.parse(xhr.responseText);
         context2.clearRect(0, 0, video.width, video.height);
         context2.strokeRect(res.x, res.y, res.w, res.h);
@@ -93,5 +75,36 @@ function postFaceBB(cap_img) {
     };
     xhr.send(body);
 }
+
 drawFaceBB();
-// setInterval(drawFaceBB, 300);
+
+// var uri = 'ws://localhost:60000';
+
+// window.onload = function () {
+//     connection = new WebSocket(uri);
+//     connection.onopen = onOpen;
+//     connection.onmessage = onMessage;
+// };
+
+// function onOpen(event) {
+//     console.log('Connect successful!');
+//     websocketSend(canvas.toDataURL('image/jpeg').replace(/^.*,/, ''));
+// }
+
+// function onMessage(event) {
+//     //Incoming data
+//     res = JSON.parse(event.data.replace(/'/g, '"'));
+//     if (res.x !== 0) {
+//         context2.clearRect(0, 0, video.width, video.height);
+//         context2.strokeRect(res.x, res.y, res.w, res.h);
+//     }
+//     // setInterval(function () {
+//     //     websocketSend(canvas.toDataURL('image/jpeg').replace(/^.*,/, ''));
+//     // }, 100);
+//     websocketSend(canvas.toDataURL('image/jpeg').replace(/^.*,/, ''));
+// }
+
+// function websocketSend(data) {
+//     //Send data
+//     connection.send(data);
+// }

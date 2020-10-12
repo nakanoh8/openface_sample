@@ -5,7 +5,9 @@ import numpy as np
 import cv2
 import requests
 import chardet
-import data_uri
+import json
+
+auth_ok_thr = 0.3
 
 def signup(user_id, capture_img):
     face_vct_1 = openface_func.getFaceVector(capture_img)
@@ -15,46 +17,49 @@ def signup(user_id, capture_img):
     ###
     ###
 
-def face_recog(capture_img):
+def face_recog(img_base64):
+    img_binary = base64.b64decode(img_base64)
+    img_jpg=np.frombuffer(img_binary, dtype=np.uint8)
+    #raw image <- jpg
+    img = cv2.imdecode(img_jpg, cv2.IMREAD_COLOR)
+    # #デコードされた画像の保存先パス
+    # image_file="/home/app/static/img/auth_img.jpg"
+    # if img is None:
+    #     return "CAPTURE_IMG_ERROR"
+    # #画像を保存する場合
+    # cv2.imwrite(image_file, img)
+
     # 認証時の撮影画像から顔ベクトル(認証ベクトル)を取得
     # OK: 顔ベクトルを返却 / NG: Noneを返却
-    capture_img_vec = openface_func.getFaceVector(capture_img)
-    if capture_img_vec is None:
-        return None
+    img_vec = openface_func.get_face_vector(img)
+    if img_vec is None:
+        return "NO_CONTAINS_FACE"
     # OK
-    # 認証ベクトル一覧を取得→ループして各データに対してベクトル間の距離を取得
-    # 距離が設定した閾値(1.0)以下となるデータが存在した場合、スマートロックを解錠する
-    sample_img_vec = openface_func.get_face_vector("/root/openface/images/examples/lennon-2.jpg")
-    res = openface_func.get_face_distance(capture_img_vec, sample_img_vec)
-    print(res)
-    return res
+    json_open = open('/home/app/static/users.json', 'r')
+    json_load = json.load(json_open)
+    for user in json_load:
+        d = openface_func.get_face_distance(img_vec, user["face_vector"])
+        if d <= auth_ok_thr:
+            return "AUTH_OK: [GET_DISTANCE] " + str(d)
+        return "AUTH_NG: [GET_DISTANCE] " + str(d)
+
+    return "AUTH_NG"
     #####
 
-def get_face_bounding_box(capture_img_base64):
-    # encode=base64.b64encode(capture_img_base64)
-    # with open("base64.txt","wb") as f:
-    #     f.write(capture_img_base64.encode())
+# print(openface_func.get_face_vector("/home/app/static/img/hayato-1.jpg"))
 
-    # print("### capture_img_base64", type(capture_img_base64))
-    # i = get_sync(capture_img_base64)
-    # print("### i", i)
-    # encode=base64.b64encode(capture_img_base64)
-    # print("### encode", type(encode))
+def get_face_bounding_box(img_base64):
     #バイナリデータ <- base64でエンコードされたデータ  
-    capture_img_binary = base64.b64decode(capture_img_base64)
-    # print("### capture_img_binary", type(capture_img_binary))
-    capture_img_jpg=np.frombuffer(capture_img_binary, dtype=np.uint8)
-    # print("### capture_img_jpg", type(capture_img_jpg))
+    img_binary = base64.b64decode(img_base64)
+    img_jpg=np.frombuffer(img_binary, dtype=np.uint8)
     #raw image <- jpg
-    capture_img = cv2.imdecode(capture_img_jpg, cv2.IMREAD_COLOR)
-    # print("### capture_img", type(capture_img))
-    #デコードされた画像の保存先パス
-    image_file="/home/app/capture_img.jpg"
-    #画像を保存する場合
-    cv2.imwrite(image_file, capture_img)
-    bb = openface_func.get_face_bounding_box("/home/app/capture_img.jpg")
-    # print(bb)
+    img = cv2.imdecode(img_jpg, cv2.IMREAD_COLOR)
+    # print("cv2.imdecode", type(img))
+    # #デコードされた画像の保存先パス
+    # image_file="/home/app/static/img/capture_img.jpg"
+    # if img is None:
+    #     return {"x": 0, "y": 0, "w": 0, "h": 0}
+    # #画像を保存する場合
+    # cv2.imwrite(image_file, img)
+    bb = openface_func.get_face_bounding_box(img)
     return bb
-
-
-# faceCheck("/root/openface/images/examples/lennon-1.jpg")
