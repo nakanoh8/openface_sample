@@ -44,17 +44,17 @@ def get_face_vector(bgrImg):
     # if alignedFace is None:
     #     raise Exception("Unable to align image: {}".format(imgPath))
     rep = net.forward(alignedFace)
-    return to_arr_from_ndarr(rep)
+    return to_arr(rep)
 
 # 顔ベクトル間の距離を取得
 def get_face_distance(imgVec1, imgVec2):
-    d = to_ndarr_from_arr(imgVec1) - to_ndarr_from_arr(imgVec2)
+    d = to_ndarr(imgVec1) - to_ndarr(imgVec2)
     return float("{:0.3f}".format(np.dot(d, d)))
 
-def to_arr_from_ndarr(ndarr):
+def to_arr(ndarr):
     return ndarr.tolist()
 
-def to_ndarr_from_arr(arr):
+def to_ndarr(arr):
     return np.array(arr)
 
 # 顔の抽出範囲座標の4点を取得
