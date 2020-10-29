@@ -22,6 +22,12 @@ def face_recognition():
     res = service.face_recog(request.form["img"])
     return make_response(res)
 
+@api.route('/test', methods=['POST'])
+def test():
+    res = service.postTest()
+    print(res)
+    return make_response(res)
+
 # ----------------
 # WebSocket使用パターン
 # ----------------

@@ -1,3 +1,5 @@
+// const { getDefaultSettings } = require("http2");
+
 //動画流す準備
 var video = document.getElementById('video');
 // getUserMedia によるカメラ映像の取得
@@ -44,7 +46,9 @@ document.addEventListener('keydown', (event) => {
     var keyName = event.key;
     if (keyName === ' ') {
         console.log(`keydown: SpaceKey`);
-        authenticate();
+        // authenticate();
+        postTest();
+        // getTest();
     }
 });
 
@@ -76,7 +80,29 @@ function postFaceBB(cap_img_base64) {
     xhr.send(body);
 }
 
-drawFaceBB();
+// drawFaceBB();
+
+function postTest() {
+    const body = new FormData();
+    body.append('test', 'test from JS');
+    xhr.open('POST', 'http://localhost:8000/test', true);
+    xhr.onload = () => {
+        res = JSON.parse(xhr.responseText);
+        console.log(res)
+        getTest()
+    };
+    xhr.send(body);
+}
+
+function getTest() {
+    const body = new FormData();
+    xhr.open('GET', 'http://localhost:8000/', true);
+    xhr.onload = () => {
+        // res = JSON.parse(xhr.responseText);
+        console.log(xhr.responseText)
+    };
+    xhr.send(body);
+}
 
 // var uri = 'ws://localhost:60000';
 

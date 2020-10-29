@@ -8,6 +8,24 @@ from . import openface_functions
 
 auth_ok_thr = 0.3
 
+import requests
+import pprint
+
+# with open('data/temp/qiita_access_token.txt') as f:
+#     qiita_access_token = f.read().strip()
+
+# headers = {'Authorization': 'Bearer {}'.format(qiita_access_token)}
+
+def postTest():
+    url_items = 'http://localhost:8000/test'
+
+    item_data = {
+        'test': 'test!!!!'
+    }
+
+    r_post = requests.post(url_items, json=item_data)
+    print(r_post.status_code)
+
 def signup(user_id, capture_img):
     face_vct_1 = openface_functions.getFaceVector(capture_img)
     if face_vct_1 is None:
