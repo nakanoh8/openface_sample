@@ -80,7 +80,7 @@ function postFaceBB(cap_img_base64) {
     xhr.send(body);
 }
 
-// drawFaceBB();
+drawFaceBB();
 
 function postTest() {
     const body = new FormData();

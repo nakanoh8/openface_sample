@@ -69,6 +69,7 @@ def get_face_bounding_box(bgrImg):
     # print("rgbImg", type(rgbImg))
     bb = align.getLargestFaceBoundingBox(rgbImg)
     if bb is None:
+        print("#### No face")
         return {"x": 0, "y": 0, "w": 0, "h": 0}
     return {
         "x": bb.left(), 
